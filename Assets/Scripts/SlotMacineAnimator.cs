@@ -81,7 +81,7 @@ public class SlotMachineAnimator : MonoBehaviour
 
 		// Reset last child to the top instantly
 		lastChild.SetSiblingIndex(0);
-		lastChild.position = new Vector3(lastChild.position.x, topPositionY, lastChild.position.z);
+		//lastChild.position = new Vector3(lastChild.position.x, lastChild.position.y, lastChild.position.z);
 	}
 	private IEnumerator MoveUIElement(Transform element, float targetY, float duration)
 	{
@@ -100,15 +100,6 @@ public class SlotMachineAnimator : MonoBehaviour
 			elapsedTime += Time.deltaTime;
 			yield return null;
 		}
-		element.position = target;
+		element.GetComponent<RectTransform>().position = target;
 	}
 }
-
-
-/*
-Transform trans = reelBGs[0].transform;
-if (trans.childCount > 0)
-{
-	Transform lastChild = trans.GetChild(trans.childCount - 1);
-	lastChild.SetSiblingIndex(0);
-}*/
