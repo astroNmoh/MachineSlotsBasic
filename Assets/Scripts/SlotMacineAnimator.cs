@@ -64,15 +64,16 @@ public class SlotMachineAnimator : MonoBehaviour
 	}
 	private IEnumerator MoveReelsBottomToTop(GameObject column, float duration)
 	{
-		float topPositionY = column.transform.GetChild(0).GetComponent<RectTransform>().rect.position.y;
+		float topPositionY = column.transform.GetChild(0).GetComponent<RectTransform>().localPosition.y;
 		Debug.Log("Column nro " + column.name + " with top reel at y: " + topPositionY);
 		Transform lastChild = column.transform.GetChild(column.transform.childCount - 1);
 
 		// Move all elements down smoothly
 		foreach (Transform child in column.transform)
 		{
-			float moveDistance = column.GetComponent<RectTransform>().rect.position.y;
-			StartCoroutine(MoveUIElement(child, moveDistance, duration));
+			//float moveDistance = column.transform.GetChild(column.transform.childCount -1).GetComponent<RectTransform>().localPosition.y;
+			float speedRotation = -1000;
+			StartCoroutine(MoveUIElement(child, speedRotation, duration));
 		}
 
 		// Wait for the movement to complete
@@ -84,16 +85,18 @@ public class SlotMachineAnimator : MonoBehaviour
 	}
 	private IEnumerator MoveUIElement(Transform element, float targetY, float duration)
 	{
-		Vector3 target = element.localPosition - new Vector3(0, targetY, 0);
+		Vector3 target = new Vector3(element.GetComponent<RectTransform>().position.x,
+			element.GetComponent<RectTransform>().position.y - targetY,
+			element.GetComponent<RectTransform>().position.z);
 		float speed = 5f;
-		Vector3 startPos = element.position;
+		Vector3 startPos = element.GetComponent<RectTransform>().position;
 
 		float elapsedTime = 0;
 
 		while (elapsedTime < duration)
 		{
 			float t = Mathf.SmoothStep(0, 1, elapsedTime / duration);
-			element.position = Vector3.Lerp(startPos, target, t);
+			element.GetComponent<RectTransform>().position = Vector3.Lerp(startPos, target, t);
 			elapsedTime += Time.deltaTime;
 			yield return null;
 		}
