@@ -1159,7 +1159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0780caed77fec3e448f543e286383b7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slotMachiuneAnimator: {fileID: 869701977}
+  slotMachineAnimator: {fileID: 869701977}
 --- !u!114 &869701977
 MonoBehaviour:
   m_ObjectHideFlags: 0

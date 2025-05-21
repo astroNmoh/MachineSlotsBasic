@@ -5,7 +5,7 @@ using static Reels;
 public enum Reels : sbyte { Bell, WaterM, Grape, Plum, Orange, Lemon, Berry }
 public class SlotMachineController : MonoBehaviour
 {
-	[SerializeField] private SlotMachineAnimator slotMachiuneAnimator;
+	[SerializeField] private SlotMachineAnimator slotMachineAnimator;
 	public List<List<Reels>> slotMachine;
 	    
   void Start()
@@ -19,21 +19,23 @@ public class SlotMachineController : MonoBehaviour
 			new List <Reels> { Lemon, Plum, Plum, Lemon, Grape, Orange, WaterM, WaterM, Bell, Berry, Berry, Lemon, Orange, Plum, Lemon},
 			new List <Reels> { Grape, Berry, Bell, WaterM, Orange, Orange, Lemon, Plum, Orange, Lemon, Grape, Bell, WaterM, Berry}
 		};
-		slotMachiuneAnimator.Init();
+		slotMachineAnimator.Init();
 	}
 
 	public void Spin()
 	{
 		float randomTime = Random.Range(2f, 4f);
-		PrecomputeIndexes(randomTime);
-		StartCoroutine(slotMachiuneAnimator.SpinColumn(randomTime));
+		int totalRotations = PrecomputeIndexes(randomTime);
+		StartCoroutine(slotMachineAnimator.SpinColumn(randomTime));
 	}
 
-	private void PrecomputeIndexes(float spinDuration) 
+	private int PrecomputeIndexes(float spinDuration) 
 	{
-		//float totalRotations = (initialSpeed * duration) * 0.5f; // Adjust multiplier based on easing
+		float totalRotations = (spinDuration); 
+		// Adjust multiplier based on easing
 		//int finalIndex = (startIndex + (int)totalRotations) % columnSize;
 		//return finalIndex;
+		return 1;
 	}
 
   void Update()

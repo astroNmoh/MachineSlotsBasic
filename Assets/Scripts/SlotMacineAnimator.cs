@@ -47,7 +47,7 @@ public class SlotMachineAnimator : MonoBehaviour
 	{
 		for (int i = 0; i < reelBGs.Length; i++)
 		{
-			StartCoroutine(MoveReelsBottomToTop(reelBGs[i], duration));
+      StartCoroutine(MoveReelsBottomToTop(reelBGs[i], duration));
 			yield return new WaitForSeconds(columnInterval);
 		}
 	}
@@ -66,40 +66,64 @@ public class SlotMachineAnimator : MonoBehaviour
 	{
 		float topPositionY = column.transform.GetChild(0).GetComponent<RectTransform>().localPosition.y;
 		Debug.Log("Column nro " + column.name + " with top reel at y: " + topPositionY);
-		Transform lastChild = column.transform.GetChild(column.transform.childCount - 1);
+		RectTransform lastChildRTrans = column.transform.GetChild(column.transform.childCount - 1).GetComponent<RectTransform>();
+		Transform firstChild = column.transform.GetChild(0);
 
 		// Move all elements down smoothly
-		foreach (Transform child in column.transform)
+		foreach (Transform reel in column.transform)
 		{
 			//float moveDistance = column.transform.GetChild(column.transform.childCount -1).GetComponent<RectTransform>().localPosition.y;
 			float speedRotation = -1000;
-			StartCoroutine(MoveUIElement(child, speedRotation, duration));
+			StartCoroutine(MoveUIReel(reel, speedRotation, duration, lastChildRTrans.localPosition));
 		}
 
 		// Wait for the movement to complete
 		yield return new WaitForSeconds(duration);
 
-		// Reset last child to the top instantly
-		lastChild.SetSiblingIndex(0);
-		//lastChild.position = new Vector3(lastChild.position.x, lastChild.position.y, lastChild.position.z);
-	}
-	private IEnumerator MoveUIElement(Transform element, float targetY, float duration)
+    List<Transform> reelsToMove = new List<Transform>();
+    foreach (Transform reel in column.transform)
+		{
+
+    }
+
+		foreach (Transform reel in reelsToMove)
+		{
+      reel.SetSiblingIndex(column.transform.childCount - 1);
+    }
+
+  }
+  private IEnumerator MoveUIReel(Transform reel, float targetY, float duration, Vector3 lastColumnPos)
 	{
-		Vector3 target = new Vector3(element.GetComponent<RectTransform>().position.x,
-			element.GetComponent<RectTransform>().position.y - targetY,
-			element.GetComponent<RectTransform>().position.z);
-		float speed = 5f;
-		Vector3 startPos = element.GetComponent<RectTransform>().position;
+		Vector3 target = new Vector3(reel.GetComponent<RectTransform>().localPosition.x,
+			reel.GetComponent<RectTransform>().localPosition.y - targetY,
+			reel.GetComponent<RectTransform>().localPosition.z);
+
+		//Debug.Log("Original TargetY to move reel: " + target.y);
+		Vector3 startPos = reel.GetComponent<RectTransform>().localPosition;
 
 		float elapsedTime = 0;
 
 		while (elapsedTime < duration)
 		{
-			float t = Mathf.SmoothStep(0, 1, elapsedTime / duration);
-			element.GetComponent<RectTransform>().position = Vector3.Lerp(startPos, target, t);
+      if (reel.GetComponent<RectTransform>().localPosition.y >= 500)
+      {
+				// Move reel instantly if exits mask
+				float lastReelPos = reel.GetComponent<RectTransform>().localPosition.y;
+        reel.GetComponent<RectTransform>().localPosition = lastColumnPos;
+
+        //Debug.Log("moving reel to last post" + reel.GetComponent<RectTransform>().localPosition);
+
+        // Update start position so Lerp continues from the new location
+        float remainingDistance = target.y - lastReelPos - startPos.y;
+        target = new Vector3(startPos.x, startPos.y - remainingDistance, startPos.z);
+				//Debug.Log("New targetY: " + target.y);
+        startPos = lastColumnPos;
+      }
+      float t = Mathf.SmoothStep(0, 1, elapsedTime / duration);
+			reel.GetComponent<RectTransform>().localPosition = Vector3.Lerp(startPos, target, t);
 			elapsedTime += Time.deltaTime;
-			yield return null;
+      yield return null;
 		}
-		element.GetComponent<RectTransform>().position = target;
+		//reel.GetComponent<RectTransform>().position = target;
 	}
 }
