@@ -4,19 +4,16 @@ using System;
 using UnityEngine.UI;
 public class SlotMachineAnimator : MonoBehaviour
 {
-	[SerializeField] private SlotMachineController slotController;
+	[SerializeField] private SlotMachineController slotController; //We could setup an interface to decouple more
+	[SerializeField] private GameObject[] reelBGs = new GameObject[5]; //Create this dinamically if needed, just keeping it simple here
 	private Dictionary<Reels, Sprite> reelSprites = new Dictionary<Reels, Sprite>();
-	private List<Canvas> canvases = new List<Canvas>();
-
+	
+	
 	public void Init()
 	{
-		foreach (Canvas can in gameObject.GetComponentsInChildren<Canvas>())
-		{
-			canvases.Add(can);
-		}
 		foreach (Reels reel in Enum.GetValues(typeof(Reels)))
 		{
-			int reelIndex = (int)reel + 1;		
+			int reelIndex = (int)reel + 1;
 			//Debug.Log("address: " + ("Figures/" + reelIndex).ToString());
 			Texture2D texture = Resources.Load<Texture2D>("Figures/" + reelIndex);
 			//Debug.Log(texture);
@@ -29,13 +26,15 @@ public class SlotMachineAnimator : MonoBehaviour
 	}
 	public void PopulateColumns()
 	{
+		float imageScale = 2.5f;
 		for (int i = 0; i < slotController.slotMachine.Count; i++)
 		{
 			var list = slotController.slotMachine[i];
 			foreach (var reel in list)
 			{
 				GameObject imageHolder = new GameObject("ReelImage");
-				imageHolder.transform.SetParent(canvases[i].transform);
+				imageHolder.transform.SetParent(reelBGs[i].transform);
+				imageHolder.transform.localScale *= imageScale;
 
 				Image img = imageHolder.AddComponent<Image>();
 				AssignSpriteToUI(img, reel);
