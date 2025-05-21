@@ -44,7 +44,7 @@ public class SlotMachineAnimator : MonoBehaviour
 
 	public void SpinColumn(float duration)
 	{
-
+		MoveReelsBottomToTop();
 	}
 	private void AssignSpriteToUI(Image imageComponent, Reels reelType)
 	{
@@ -57,5 +57,15 @@ public class SlotMachineAnimator : MonoBehaviour
 			Debug.LogWarning($"No sprite found for {reelType}");
 		}
 	}
+	void MoveReelsBottomToTop()
+	{
+		Transform trans = reelBGs[0].transform;
+		if (trans.childCount > 0)
+		{
+			Transform lastChild = trans.GetChild(trans.childCount - 1);
+			lastChild.SetSiblingIndex(0);
+		}
+	}
+
 
 }
