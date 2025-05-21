@@ -42,7 +42,7 @@ public class SlotMachineAnimator : MonoBehaviour
 		}
 	}
 
-	public void AnimateColumn(float duration)
+	public void SpinColumn(float duration)
 	{
 
 	}

@@ -26,7 +26,7 @@ public class SlotMachineController : MonoBehaviour
 	{
 		float randomTime = Random.Range(2f, 4f);
 		PrecomputeIndexes(randomTime);
-		slotMachiuneAnimator.AnimateColumn(randomTime);
+		slotMachiuneAnimator.SpinColumn(randomTime);
 	}
 
 	private void PrecomputeIndexes(float spinDuration) 
