@@ -51,33 +51,15 @@ public class SlotMachineAnimator : MonoBehaviour
 	private IEnumerator MoveReelsBottomToTop(GameObject column, float duration, int totalRotations)
 	{
 		int childCount = column.transform.childCount;
-		Transform[] children = new Transform[childCount];
-		
-		for (int i = 0; i < childCount; i++)
+		for (int j = 0; j < 14; j++)
 		{
-			children[i] = column.transform.GetChild(i);
-		}
-
-		// Move each child forward cyclically
-		for (int i = 0; i < childCount; i++)
-		{
-			int newIndex = (i + 1) % childCount; // Cyclic shift
-			children[i].SetSiblingIndex(newIndex);
-		}
-		/*
-		for (int i = 0; i < 1; i++)
-		{
-			foreach (Transform reel in column.transform)
+			for (int i = 0; i < childCount; i++)
 			{
-				yield return new WaitForEndOfFrame();
-				reel.SetAsLastSibling();
-				Debug.Log(reel.name + " " + reel.GetSiblingIndex());
+				column.transform.GetChild(i).SetSiblingIndex(i + 1);
 			}
-			*/
-		// Wait for the movement to complete
-		yield return new WaitForSeconds(duration / totalRotations);
-		//}
-  }
+			yield return new WaitForSeconds(duration / totalRotations);
+		}
+	}
 	private void AssignSpriteToUI(Image imageComponent, Reels reelType)
 	{
 		if (reelSprites.TryGetValue(reelType, out Sprite sprite))
