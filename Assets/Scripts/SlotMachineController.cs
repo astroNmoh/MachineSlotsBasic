@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 using static Reels;
-
 public enum Reels : sbyte { Bell, WaterM, Grape, Plum, Orange, Lemon, Berry }
 public class SlotMachineController : MonoBehaviour
 {
@@ -26,22 +25,16 @@ public class SlotMachineController : MonoBehaviour
 	{
 		float randomTime = Random.Range(2f, 4f);
 		int totalRotations = PrecomputeIndexes(randomTime);
-		StartCoroutine(slotMachineAnimator.SpinColumn(randomTime));
+		StartCoroutine(slotMachineAnimator.SpinColumn(randomTime, totalRotations));
 	}
 
 	private int PrecomputeIndexes(float spinDuration) 
 	{
-		float totalRotations = (spinDuration); 
-		// Adjust multiplier based on easing
-		//int finalIndex = (startIndex + (int)totalRotations) % columnSize;
-		//return finalIndex;
-		return 1;
+		float speedRotation = 10f;
+		float easeFactor = 1 - Mathf.Exp(-spinDuration);
+		int totalRotations = (int)Mathf.Floor(spinDuration * speedRotation * easeFactor);
+		return totalRotations;
 	}
-
-  void Update()
-  {
-  
-  }
 }
 
 public static class Utils
