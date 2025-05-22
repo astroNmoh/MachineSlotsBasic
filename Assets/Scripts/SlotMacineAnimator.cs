@@ -51,7 +51,7 @@ public class SlotMachineAnimator : MonoBehaviour
 	private IEnumerator MoveReelsBottomToTop(GameObject column, float duration, int totalRotations)
 	{
 		int childCount = column.transform.childCount;
-		for (int j = 0; j < 14; j++)
+		for (int j = 0; j < totalRotations; j++)
 		{
 			for (int i = 0; i < childCount; i++)
 			{
