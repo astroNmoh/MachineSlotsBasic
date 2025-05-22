@@ -27,13 +27,17 @@ public class SlotMachineController : MonoBehaviour
 		int totalRotations = PrecomputeIndexes(randomTime);
 		StartCoroutine(slotMachineAnimator.SpinColumn(randomTime, totalRotations));
 	}
-
 	private int PrecomputeIndexes(float spinDuration) 
 	{
 		float speedRotation = 10f;
 		float easeFactor = 1 - Mathf.Exp(-spinDuration);
 		int totalRotations = (int)Mathf.Floor(spinDuration * speedRotation * easeFactor);
 		return totalRotations;
+	}
+
+	private void CheckReward(Reels[][] indexes)
+	{
+
 	}
 }
 
