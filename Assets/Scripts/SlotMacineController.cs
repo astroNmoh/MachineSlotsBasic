@@ -209,3 +209,12 @@ public class SlotMachineController : MonoBehaviour
 	}
 	#endregion
 }
+
+
+/* TODO:
+
+Sprite creation move to start and use those sprites references on the updatebuttonui
+Add rest of custom patterns to patternstocheck
+Separate SlotMachineController into 2-3 different classes: controller/animation/machinesetup
+
+*/
