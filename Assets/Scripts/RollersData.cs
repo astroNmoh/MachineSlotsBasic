@@ -3,10 +3,11 @@ using static Reels;
 public enum Reels : sbyte { Bell, WaterM, Grape, Plum, Orange, Lemon, Berry }
 public class RollersData
 {
-	public List<List<Reels>> rollers; 
+	public List<List<Reels>> rollers;
+	public List<(int, int)[]> winningPatterns;
   public RollersData()
   {
-		//This could be handled by Json to separate the data, or a MachineSlotData class, but done here for faster sample building.
+		//This could be handled as Json or any preferred input data
 		rollers = new List<List<Reels>>
 		{
 			new List <Reels> { Orange, Bell, WaterM, Berry, Plum, Lemon, Grape, Plum, Bell, Bell, Orange, Grape, Lemon, Lemon},
@@ -15,5 +16,14 @@ public class RollersData
 			new List <Reels> { Lemon, Plum, Plum, Lemon, Grape, Orange, WaterM, WaterM, Bell, Berry, Berry, Lemon, Orange, Plum, Lemon},
 			new List <Reels> { Grape, Berry, Bell, WaterM, Orange, Orange, Lemon, Plum, Orange, Lemon, Grape, Bell, WaterM, Berry}
 		};
+
+		winningPatterns = new List<(int, int)[]>()
+		{
+			//We could add patterns dinamically, or same sent as json
+			new (int, int)[] { (0, 2), (1, 0), (2, 2), (3, 0), (4, 2) },
+			new (int, int)[] { (0, 0), (1, 2), (2, 0), (3, 2), (4, 0) },
+			new (int, int)[] { (0, 0), (1, 1), (2, 2), (3, 1), (4, 0) }
+		};
+
 	}
 }

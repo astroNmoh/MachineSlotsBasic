@@ -1,8 +1,9 @@
-using UnityEngine;
-using System.Collections.Generic;
 using System;
-using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class SlotMachineController : MonoBehaviour
 {
@@ -24,7 +25,8 @@ public class SlotMachineController : MonoBehaviour
 		int totalRotations = PrecomputeIndexes(randomTime); //We could do parallel processing of animation and results
 		StartCoroutine(AnimateSpinColumn(randomTime, totalRotations));
 		UpdateCurrentRollers(totalRotations);
-		CheckRewards();
+		(bool, bool)hasWon = CheckWin();
+		Debug.Log(hasWon.Item1 || hasWon.Item2 ? "WIN" + hasWon : "Not win");
 	}
 	private void PopulateReelSpritesDictionary()
 	{
@@ -106,17 +108,49 @@ public class SlotMachineController : MonoBehaviour
 			currentRollers[i] = newOrder;
 		}
 	}
-	private void CheckRewards()
+
+	public (bool, bool) CheckWin()
 	{
-		for (int i = 0; i < currentRollers.Count; i++)
+		bool customPatternWin = false;
+		foreach ((int, int)[] pattern in data.winningPatterns)
 		{
-			for (int j = 0; j < currentRollers[i].Count; j++)
+			if (CheckPattern(pattern))
+				customPatternWin = true;
+		}
+		bool rowWin = CheckRows();
+
+		return (customPatternWin, rowWin);
+	}
+
+	private bool CheckPattern((int col, int row)[] pattern)
+	{
+		Reels first = currentRollers[pattern[0].col][pattern[0].row];
+
+		foreach (var (col, row) in pattern)
+		{
+			if (currentRollers[col][row] != first)
+				return false;
+		}
+		return true;
+	}
+	private bool CheckRows()
+	{
+		foreach (var rowIndex in Enumerable.Range(0, currentRollers.Count)) // Iterate through each row
+		{
+			int matchCount = 1;
+			for (int col = 1; col < currentRollers[rowIndex].Count; col++)
 			{
-				//checkpattern
-				//checkcustompattern
+				if (currentRollers[rowIndex][col] == currentRollers[rowIndex][col - 1])
+					matchCount++;
+				else
+					matchCount = 1;
+
+				if (matchCount >= 2) return true; // Winning condition: at least two consecutive matches
 			}
 		}
+		return false;
 	}
+
 
 	private void AnnounceResults()
 	{
