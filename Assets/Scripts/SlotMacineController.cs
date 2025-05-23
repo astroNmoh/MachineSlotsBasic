@@ -121,7 +121,6 @@ public class SlotMachineController : MonoBehaviour
 
 		return (customPatternWin, rowWin);
 	}
-
 	private bool CheckPattern((int col, int row)[] pattern)
 	{
 		Reels first = currentRollers[pattern[0].col][pattern[0].row];
@@ -150,13 +149,14 @@ public class SlotMachineController : MonoBehaviour
 				else
 					break;
 
-				if (matchCount >= 2) return true;
+				if (matchCount >= 2) {
+					Debug.Log(data.winRewards[first][matchCount]);//Print UI function with the data
+					return true;
+				}
 			}
 		}
-
 		return false;
 	}
-
 
 	private void AnnounceResults()
 	{
