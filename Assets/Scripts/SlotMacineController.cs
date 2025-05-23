@@ -135,19 +135,25 @@ public class SlotMachineController : MonoBehaviour
 	}
 	private bool CheckRows()
 	{
-		foreach (var rowIndex in Enumerable.Range(0, currentRollers.Count)) // Iterate through each row
+		int rowCount = 3;
+		int colCount = currentRollers.Count;
+
+		for (int row = 0; row < rowCount; row++)
 		{
+			Reels first = currentRollers[0][row];
 			int matchCount = 1;
-			for (int col = 1; col < currentRollers[rowIndex].Count; col++)
+
+			for (int col = 1; col < colCount; col++)
 			{
-				if (currentRollers[rowIndex][col] == currentRollers[rowIndex][col - 1])
+				if (currentRollers[col][row] == first)
 					matchCount++;
 				else
-					matchCount = 1;
+					break;
 
-				if (matchCount >= 2) return true; // Winning condition: at least two consecutive matches
+				if (matchCount >= 2) return true;
 			}
 		}
+
 		return false;
 	}
 
