@@ -5,7 +5,7 @@ public class RollersData
 {
 	public List<List<Reels>> rollers;
 	public List<(int, int)[]> winningPatterns;
-	public Dictionary<Reels, Dictionary<int, int>> winRewards; //Could be a 2D array for critical performance searches
+	public Dictionary<Reels, Dictionary<int, int>> winRewards; //Could be a row[2]D array for critical performance searches
   public RollersData()
   {
 		//This could be handled as Json or any preferred input data
@@ -18,12 +18,17 @@ public class RollersData
 			new List <Reels> { Grape, Berry, Bell, WaterM, Orange, Orange, Lemon, Plum, Orange, Lemon, Grape, Bell, WaterM, Berry}
 		};
 
+		int[] col = { 0, 1, 2, 3, 4 };
+		int[] row = { 0, 1, 2 };
 		winningPatterns = new List<(int, int)[]>()
 		{
-			//We could add patterns dinamically, or same sent as json
-			new (int, int)[] { (0, 2), (1, 0), (2, 2), (3, 0), (4, 2) },
-			new (int, int)[] { (0, 0), (1, 2), (2, 0), (3, 2), (4, 0) },
-			new (int, int)[] { (0, 0), (1, 1), (2, 2), (3, 1), (4, 0) }
+			//We could add patterns dinamically, or sent as json
+			new (int, int)[] { (col[0], row[2]), (col[1], row[0]), (col[2], row[2]), (col[3], row[0]), (col[4], row[2]) },
+			new (int, int)[] { (col[0], row[0]), (col[1], row[2]), (col[2], row[0]), (col[3], row[2]), (col[4], row[0]) },
+			new (int, int)[] { (col[0], row[0]), (col[1], row[1]), (col[2], row[2]), (col[3], row[1]), (col[4], row[0]) },
+			new (int, int)[] { (col[0], row[2]), (col[1], row[1]), (col[2], row[0]), (col[3], row[1]), (col[4], row[2]) },
+			new (int, int)[] { (col[0], row[0]), (col[1], row[0]), (col[2], row[1]), (col[3], row[2]), (col[4], row[2]) },
+			new (int, int)[] { (col[0], row[2]), (col[1], row[2]), (col[2], row[1]), (col[3], row[0]), (col[4], row[0]) }
 		};
 
 		winRewards = new Dictionary<Reels, Dictionary<int, int>>()
