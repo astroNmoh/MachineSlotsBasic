@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using static Reels;
-public enum Reels : sbyte { Bell, WaterM, Grape, Plum, Orange, Lemon, Berry }
+public enum Reels : byte { Bell, WaterM, Grape, Plum, Orange, Lemon, Berry }
 public class RollersData
 {
 	public List<List<Reels>> rollers;
