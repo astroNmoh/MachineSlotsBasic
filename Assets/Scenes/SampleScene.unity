@@ -1158,6 +1158,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92215ac51df9ed0418508b326f44ab73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spinButton: {fileID: 262521014}
+  spinButtonImage:
+  - {fileID: 2800000, guid: ac0ffdd8a2b768f4b9d9dcfb7a194e36, type: 3}
+  - {fileID: 2800000, guid: cbcd76eb15acedc478b9e90a8ef62afa, type: 3}
   reelBGs:
   - {fileID: 1816910649}
   - {fileID: 977409203}
