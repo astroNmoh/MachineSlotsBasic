@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +10,7 @@ public class SlotMachineController : MonoBehaviour
 	private RollersData data;
 	private Dictionary<Reels, Sprite> reelSprites = new Dictionary<Reels, Sprite>();
 	private List<List<Reels>> currentRollers = new List<List<Reels>>();
+	private int winningRow, winningStreak;
 	
 	private void Start()
 	{
@@ -22,11 +22,15 @@ public class SlotMachineController : MonoBehaviour
 	public void Spin()
 	{
 		float randomTime = UnityEngine.Random.Range(2f, 4f);
-		int totalRotations = PrecomputeIndexes(randomTime); //We could do parallel processing of animation and results
+		int totalRotations = PrecomputeIndexes(randomTime);
 		StartCoroutine(AnimateSpinColumn(randomTime, totalRotations));
 		UpdateCurrentRollers(totalRotations);
 		(bool, bool)hasWon = CheckWin();
-		Debug.Log(hasWon.Item1 || hasWon.Item2 ? "WIN" + hasWon : "Not win");
+
+		if (hasWon.Item1)
+		{
+			StartCoroutine(HighlightReels(winningRow, winningStreak));
+		}
 	}
 	private void PopulateReelSpritesDictionary()
 	{
@@ -91,8 +95,6 @@ public class SlotMachineController : MonoBehaviour
 			}
 			yield return new WaitForSeconds(duration / totalRotations);//add ease factor
 		}
-		
-		AnnounceResults();
 	}
 
 	private void UpdateCurrentRollers(int rotations)
@@ -151,6 +153,8 @@ public class SlotMachineController : MonoBehaviour
 
 				if (matchCount >= 2) {
 					Debug.Log(data.winRewards[first][matchCount]);//Print UI function with the data
+					winningRow = row;
+					winningStreak = matchCount;
 					return true;
 				}
 			}
@@ -158,8 +162,20 @@ public class SlotMachineController : MonoBehaviour
 		return false;
 	}
 
-	private void AnnounceResults()
+	//We could adapt this function to highliht custom pattern images as well
+	private IEnumerator HighlightReels(int row, int streak, float duration = 1.5f)
 	{
+		Image[] images = new Image[streak];
+		for (int i = 0; i < streak; i++) 
+		{
+			images[i] = reelBGs[i].transform.GetChild(row).GetComponent<Image>();
+			images[i].color = Color.red;
+		}
+		yield return new WaitForSeconds(duration);
 
+		for (int i = 0; i < streak; i++)
+		{
+			images[i].color = Color.white;
+		}
 	}
 }
