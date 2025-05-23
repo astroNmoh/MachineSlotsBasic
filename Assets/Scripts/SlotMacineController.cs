@@ -102,14 +102,20 @@ public class SlotMachineController : MonoBehaviour
 			for (int j = 0; j < columnLength; j++)
 			{
 				newOrder.Add(currentRollers[i][(j + rotations) % columnLength]);
-				Debug.Log(newOrder[j]);
 			}
 			currentRollers[i] = newOrder;
 		}
 	}
 	private void CheckRewards()
 	{
-		
+		for (int i = 0; i < currentRollers.Count; i++)
+		{
+			for (int j = 0; j < currentRollers[i].Count; j++)
+			{
+				//checkpattern
+				//checkcustompattern
+			}
+		}
 	}
 
 	private void AnnounceResults()
