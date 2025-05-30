@@ -11,7 +11,7 @@ public class SlotMachineAnimator : MonoBehaviour
 	private Sprite[] spinButtonSprites = new Sprite[2];
 	private SlotMachineController machineController;
 	private Dictionary<Reels, Sprite> reelSprites = new Dictionary<Reels, Sprite>();
-	private int winningRow, winningStreak;
+	private bool completedSpinAnim = false;
 	public void Init(List<List<Reels>> initRolleresData, SlotMachineController sMachineController)
   {
 		this.machineController = sMachineController;
@@ -29,7 +29,7 @@ public class SlotMachineAnimator : MonoBehaviour
 	}
 	public void AnimateSpin(float randomTime, int totalRotations)
 	{
-		winningStreak = 0;
+		completedSpinAnim = false;
 		float columnIntervalWait = 0.5f;
 		StartCoroutine(AnimateSpinColumn(randomTime, totalRotations, columnIntervalWait));
 		StartCoroutine(UpdateButtonUI(randomTime + columnIntervalWait * reelBGs.Length));
@@ -116,6 +116,8 @@ public class SlotMachineAnimator : MonoBehaviour
 			StartCoroutine(MoveReelsUpToDown(reelBGs[i], duration, totalRotations));
 			yield return new WaitForSeconds(columnInterval);
 		}
+		yield return new WaitForSeconds(duration - columnInterval);
+		completedSpinAnim = true;
 	}
 	private IEnumerator MoveReelsUpToDown(GameObject column, float duration, int totalRotations)
 	{
@@ -128,15 +130,16 @@ public class SlotMachineAnimator : MonoBehaviour
 			}
 			yield return new WaitForSeconds(duration / totalRotations);//add ease factor
 		}
-		if (winningStreak > 0)
-		{
-			StartCoroutine(HighlightReels(winningRow, winningStreak));
-		}
 	}
-
+	private void HandleWin(int row, int streak)
+	{
+		StartCoroutine(HighlightReels(row, streak));
+	}
 	//We could adapt this function to highliht custom pattern images as well
 	private IEnumerator HighlightReels(int row, int streak, float duration = 1.5f)
 	{
+		yield return new WaitUntil(() => completedSpinAnim);
+
 		Image[] images = new Image[streak];
 		for (int i = 0; i < streak; i++)
 		{
@@ -149,11 +152,6 @@ public class SlotMachineAnimator : MonoBehaviour
 		{
 			images[i].color = Color.white;
 		}
-	}
-	private void HandleWin(int row, int streak)
-	{
-		winningRow = row;
-		winningStreak = streak;
 	}
 	#endregion
 
